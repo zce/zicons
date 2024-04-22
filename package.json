@@ -1,0 +1,11 @@
+{
+  "name": "zicons",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "zce <w@zce.me> (https://zce.me)",
+  "type": "module",
+  "scripts": {
+    "postinstall": "git submodule update --init --recursive --depth=1",
+    "build": "node build"
+  }
+}
