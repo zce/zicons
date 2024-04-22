@@ -38,12 +38,18 @@ await mkdir(dist, { recursive: true })
 
 const lucideIcons = await Promise.all((await searchSvgs('lucide/icons')).map(loadSvg))
 
-await writeFile(`${dist}/lucide.tsx`, `type Icon = (props: React.SVGProps<SVGSVGElement>) => React.ReactElement
+await writeFile(`${dist}/lucide.tsx`, `/**
+* [UI] Icon components
+*
+* @see {@link https://lucide.dev}
+*/
+
+type Icon = (props: React.SVGProps<SVGSVGElement>) => React.ReactElement
 
 const LucideIcon: Icon = props => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} />
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} />
 )
-${lucideIcons.map(({ name, svg, base64 }) => `
+${lucideIcons.sort((a, b) => a.name.localeCompare(b.name)).map(({ name, svg, base64 }) => `
 /** ![](data:image/svg+xml;base64,${base64}) */
 export const ${name}Icon: Icon = props => (
   <LucideIcon {...props}>
@@ -57,10 +63,16 @@ export const ${name}Icon: Icon = props => (
 
 const simpleIcons = await Promise.all((await searchSvgs('simple-icons/icons')).map(loadSvg))
 
-await writeFile(`${dist}/simple.tsx`, `type Icon = (props: React.SVGProps<SVGSVGElement>) => React.ReactElement
+await writeFile(`${dist}/simple.tsx`, `/**
+* [UI] Brand Icon components
+*
+* @see {@link https://simpleicons.org}
+*/
+
+import type { Icon } from './icons'
 
 const SimpleIcon: Icon = props => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props} />
-${simpleIcons.map(({ name, svg, base64 }) => `
+${simpleIcons.sort((a, b) => a.name.localeCompare(b.name)).map(({ name, svg, base64 }) => `
 /** ![](data:image/svg+xml;base64,${base64}) */
 export const Brand${name}: Icon = props => (
   <SimpleIcon {...props}>
