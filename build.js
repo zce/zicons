@@ -38,11 +38,7 @@ await mkdir(dist, { recursive: true })
 
 const lucideIcons = await Promise.all((await searchSvgs('lucide/icons')).map(loadSvg))
 
-await writeFile(`${dist}/lucide.tsx`, `/**
-* [UI] Icon components
-*
-* @see {@link https://lucide.dev}
-*/
+await writeFile(`${dist}/lucide.tsx`, `// license: https://lucide.dev/license
 
 type Icon = (props: React.SVGProps<SVGSVGElement>) => React.ReactElement
 
