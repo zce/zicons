@@ -26,7 +26,7 @@ const loadSvg = async (path) => {
   const camel = basename(path, '.svg').replace(/-([a-z0-9])/g, (_, letter) => letter.toUpperCase())
   const name = camel[0].toUpperCase() + camel.slice(1)
   const svg = await readFile(path,'utf8')
-  const base64 = Buffer.from(svg).toString('base64')
+  const base64 = Buffer.from(svg.replace(/currentColor/g, '#64748b').replace('width="24"', 'width="50px"').replace('height="24"', 'height="50px"')).toString('base64')
   return { name, svg, base64 }
 }
 
@@ -38,10 +38,7 @@ await mkdir(dist, { recursive: true })
 
 const lucideIcons = await Promise.all((await searchSvgs('lucide/icons')).map(loadSvg))
 
-await writeFile(`${dist}/lucide.tsx`, `// license: https://lucide.dev/license
-
-type Icon = (props: React.SVGProps<SVGSVGElement>) => React.ReactElement
-
+await writeFile(`${dist}/lucide.tsx`, `
 const LucideIcon: Icon = props => (
  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} />
 )
@@ -59,14 +56,7 @@ export const ${name}Icon: Icon = props => (
 
 const simpleIcons = await Promise.all((await searchSvgs('simple-icons/icons')).map(loadSvg))
 
-await writeFile(`${dist}/simple.tsx`, `/**
-* [UI] Brand Icon components
-*
-* @see {@link https://simpleicons.org}
-*/
-
-import type { Icon } from './icons'
-
+await writeFile(`${dist}/simple.tsx`, `
 const SimpleIcon: Icon = props => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props} />
 ${simpleIcons.sort((a, b) => a.name.localeCompare(b.name)).map(({ name, svg, base64 }) => `
 /** ![](data:image/svg+xml;base64,${base64}) */
