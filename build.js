@@ -73,7 +73,7 @@ await writeFile(
   `${dist}/heroicons.tsx`,
   `
 const HeroIcon: Icon = props => (
- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} />
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props} />
 )
 ${heroIcons
   .sort((a, b) => a.name.localeCompare(b.name))
@@ -82,7 +82,7 @@ ${heroIcons
 /** ![](data:image/svg+xml;base64,${base64}) */
 export const ${name}Icon: Icon = props => (
   <HeroIcon {...props}>
-    ${svg.slice(96, svg.indexOf('\n</svg>')).replace(/\n/g, '\n    ')}
+    ${svg.slice(96, svg.indexOf('\n</svg>')).replace(/\n/g, '\n    ').replace(' stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"', '')}
   </HeroIcon>
 )
 `
